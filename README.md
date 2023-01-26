@@ -1,5 +1,5 @@
 # UPD_analysis
-Here, we tried to deeply investigate the UPD particularly maternal one’s status in
+Here, I tried to deeply investigate the UPD particularly maternal one’s status in
 trio WES data. Prior to further analysis, it is important to carry out the paternity test on the
 related data. In this regard vcftools –relatedness2 which uses KING algorithms was applied on
 the merged trio VCF file.
@@ -21,38 +21,38 @@ runs of homozygosity information in each chromosome.
 All the commands and scripts are available in the following step.
 
 
-# This file includes the commands used for paternity test and ROH analysis steps
+#### This file includes the commands used for paternity test and ROH analysis steps
 
 #### preparing VCF files for paternety test analysis based on WES ############
 ( each command is repeated for mother and father VCF file as well)
 
-# remove polyploidy from each raw VCF file 
+#### remove polyploidy from each raw VCF file 
 
 $  bcftools +fixploidy child.vcf> child_fixed.vcf  
 
-# zip the VCF file
+#### zip the VCF file
 
 $  bgzip -c child_fixed.vcf > child_fixed.vcf.gz
 
 
-# index VCF file 
+#### index VCF file 
 
 $ bcftools index child_fixed.vcf.gz
 
-# merge all the VCF files of the family
+#### merge all the VCF files of the family
 
 $ bcftools merge *.vcf.gz -Oz -o merged.vcf.gz
 
-# identifying the relatedness between the members of the family based on KING method 
+#### identifying the relatedness between the members of the family based on KING method 
 
 $  vcftools --gzvcf merged.vcf.gz --relatedness2 --out ajk
 
 #### ROH analysis by using PLINK 
 
-# converting raw VCF file for PLINK-suitable input
+#### converting raw VCF file for PLINK-suitable input
 
 $  vcftools --vcf child_fixed.vcf --plink --out myplink
 
-# apply PLINK
+#### apply PLINK
 
 $ plink --bfile UPD-Child --homozyg --allow-extra-chr --double-id --homozyg-window-snp 2 --homozyg-snp 2 --homozyg-kb 2000 --homozyg-density 100 --homozyg-window-het 2
